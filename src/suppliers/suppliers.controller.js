@@ -2,7 +2,6 @@ const suppliersService = require("./suppliers.service.js");
 const hasProperties = require("../errors/hasProperties");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 
-
 const VALID_PROPERTIES = [
   "supplier_name",
   "supplier_address_line_1",
@@ -23,21 +22,15 @@ function hasOnlyValidProperties(req, res, next) {
     (field) => !VALID_PROPERTIES.includes(field)
   );
 
-  if (invalidFields.length) {
+  if (invalidFields.length)
     return next({
       status: 400,
       message: `Invalid field(s): ${invalidFields.join(", ")}`,
     });
-  }
   next();
 }
 
 const hasRequiredProperties = hasProperties("supplier_name", "supplier_email");
-
-async function create(req, res) {
-  const data = await suppliersService.create(req.body.data);
-  res.status(201).json({ data });
-}
 
 async function supplierExists(req, res, next) {
   const supplier = await suppliersService.read(req.params.supplierId);
@@ -46,6 +39,11 @@ async function supplierExists(req, res, next) {
     return next();
   }
   next({ status: 404, message: `Supplier cannot be found.` });
+}
+
+async function create(req, res) {
+  const data = await suppliersService.create(req.body.data);
+  res.status(201).json({ data });
 }
 
 async function update(req, res) {

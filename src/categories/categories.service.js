@@ -1,4 +1,4 @@
-const knex = require("../db/fixtures/connection");
+const knex = require("../db/connection");
 
 function list() {
   return knex("categories").select("*");
